@@ -10,13 +10,13 @@ import java.util.Iterator;
 
 public class Assignment {
 	//variables
-	private ArrayList<Geography> assignment = new ArrayList<Geography>();
+	private ArrayList<Geography> assignArr = new ArrayList<Geography>();
 	private Geography key; 
 	
 	//METHODS
 	//getters
 	public ArrayList<Geography> getAssignment(){
-		return this.assignment;
+		return this.assignArr;
 	}
 	public Geography getKey(){
 		return this.key;
@@ -24,10 +24,10 @@ public class Assignment {
 	
 	//setters
 	public void addToAssignment(Geography student){
-		this.assignment.add(student);
+		this.assignArr.add(student);
 	}
-	public void setAssignmentArr(ArrayList assignment){
-		this.assignment = assignment;
+	public void setAssignmentArr(ArrayList assignArr){
+		this.assignArr = assignArr;
 	}
 		
 	//Makes a key for an assignment
@@ -41,7 +41,7 @@ public class Assignment {
 		//grading logic 
 	public void grade(){
 		this.makeKey();
-		Iterator<Geography> itr = assignment.iterator();
+		Iterator<Geography> itr = assignArr.iterator();
 		int count = 0;
 		int pointsPossible = 10;
 		//calculate how many items are worth one point
@@ -73,11 +73,11 @@ public class Assignment {
 
 public static void main (String[] args){
 	//create assignment
-	Assignment assignment = new Assignment();
+	Assignment assignArr = new Assignment();
 	//get data
 	FileGetData data = new FileGetData();
-	data.getData(assignment);//pass in an assignment
+	data.getData(assignArr);//pass in an assignment
 	//grade it
-	assignment.grade();
+	assignArr.grade();
 }
 }
