@@ -1,11 +1,13 @@
 package main.java.MapFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 
 public class Assignment {
@@ -29,12 +31,32 @@ public class Assignment {
 	public void setAssignmentArr(ArrayList assignArr){
 		this.assignArr = assignArr;
 	}
+	
 		
 	//Makes a key for an assignment
 	//filename should eventually be variable
 	public void makeKey(){
-	Path keydir = Paths.get("C:\\Users\\amy\\Documents\\W CIV\\Lindenwood\\Sp 17\\BBC keys\\Awallhermfechtel04-06.txt");
-	this.key = new Geography(keydir);
+	//Path keydir = Paths.get("C:\\Users\\amy\\Documents\\W CIV\\Lindenwood\\Sp 17\\BBC keys\\Awallhermfechtel04-06.txt");
+		FileGetData data = new FileGetData();
+		Path keydir = Paths.get((data.getDir().getParent().getParent().toString()+ File.separatorChar + "BBC keys"));
+		//this try block finds the last modified file in the dir 
+		//this is also in FileGetData (see if you can refactor)
+		try 
+		{
+			DirectoryStream<Path> stream = Files.newDirectoryStream(keydir, "*.{txt}");
+			long time = 0;
+						
+			for(Path entry: stream){
+				File tempFile=new File(entry.toString());
+				if(tempFile.lastModified() > time){
+					time = tempFile.lastModified();
+					keydir = entry;					
+				};
+			};
+		}catch (IOException e) {
+			System.out.println(e + ": did not find zip file in the last modified directory");			
+		     }
+		this.key = new Geography(keydir);
 	}
 	
 		

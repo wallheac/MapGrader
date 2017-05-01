@@ -72,6 +72,7 @@ public class Geography {
 		    Collection<Object> colors = groups.values();
 		    
 		    //colors is a collection that may contain more than one object
+		    
 		    //accounting for students who use more than one color
 		    ArrayList<String> allAnswers = new ArrayList<String>();
 		    Iterator<Object> itr = colors.iterator();
