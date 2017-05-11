@@ -40,7 +40,7 @@ public class Assignment {
 		FileGetData data = new FileGetData();
 		Path keydir = Paths.get((data.getDir().getParent().getParent().toString()+ File.separatorChar + "BBC keys"));
 		//this try block finds the last modified file in the dir 
-		//this is also in FileGetData (see if you can refactor)
+		
 		try 
 		{
 			DirectoryStream<Path> stream = Files.newDirectoryStream(keydir, "*.{txt}");
@@ -69,23 +69,19 @@ public class Assignment {
 		//calculate how many items are worth one point
 		int factor = 0;
 		factor = (int) Math.rint((float)key.getAnswers().size()/5);
-		
 		System.out.println(factor);
 		
 		while (itr.hasNext())//iterates through list of maps
 		{
 			Geography temp = itr.next(); //get next map
 			count = 0; // reset counter
-			for (int i = 0; i < key.getAnswers().size(); i++) //loop over key.answers
-			{
-				if(temp.getAnswers().contains(key.getAnswers().get(i))) //count correct answers for map
-					{
+			for (int i = 0; i < key.getAnswers().size(); i++){ //loop over key.answers
+				if(temp.getAnswers().contains(key.getAnswers().get(i))){ //count correct answers for map
 						count ++;
 					}
 			}
 			temp.setGrade((pointsPossible - (int)((key.getAnswers().size() - count)/factor)));
-			
-		
+					
 			//this is console output. Eventually should be on other side of output interface
 			System.out.println(temp.getName() + " - " + "count: " + count + "... grade: " + temp.getGrade());
 		}
