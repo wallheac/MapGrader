@@ -18,7 +18,7 @@ public class FileGetData implements GetData {
 	}
 	
 //methods
-	public void getData(Assignment assignArr){
+	public void getData(Assignment assign){
 		
 		//find the most recently modified dir and unzip most recent zip file
 		Path assignDir = this.zipHandler(this.findMostRecentDir());
@@ -29,7 +29,7 @@ public class FileGetData implements GetData {
 			for (Path entry: stream)
 		    {
 		    	Geography curr = new Geography(entry);
-		    	assignArr.addToAssignment(curr);
+		    	assign.addToAssignment(curr);
 		    }
 		}
 		catch (IOException e) {

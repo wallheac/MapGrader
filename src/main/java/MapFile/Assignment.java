@@ -93,7 +93,8 @@ public static void main (String[] args){
 	//create assignment
 	Assignment assignArr = new Assignment();
 	//get data
-	FileGetData data = new FileGetData();
+	//FileGetData data = new FileGetData();
+	CanvasGetData data = new CanvasGetData();
 	data.getData(assignArr);//pass in an assignment
 	//grade it
 	assignArr.grade();
