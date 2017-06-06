@@ -14,75 +14,104 @@ import com.google.gson.Gson;
 public class Geography {
 	
 	//elements
-	private String name;
+	private String fileName = null;
+	private String fullFile = null;
 	private ArrayList<String>answers;
 	private int grade;
+	private int userId;
+	private int assignmentId;
+	private int courseId;
 	
 	//methods
 	//setters
 	public void setGrade(int grade){
 		this.grade = grade;
 	}
-	public void setName(String name){
-		this.name = name;
+	public void setFileName(String name){
+		this.fileName = name;
+	}
+	public void setUserId(int userId){
+		this.userId = userId;
+	}
+	public void setAssignmentId(int assignmentId){
+		this.assignmentId = assignmentId;
+	}
+	public void setCourseId(int courseId){
+		this.courseId = courseId;
 	}
 	
 	//getters
 	public ArrayList<String> getAnswers(){
 		return this.answers;		
 	}
-	public String getName(){
-		return this.name;
+	public String getFileName(){
+		return this.fileName;
 	}
 	public int getGrade(){
 		return this.grade;
 	}
+	public int getUserId(){
+		return this.userId;
+	}
+	public int getAssignmentId(){
+		return this.assignmentId;
+	}
+	public int getCourseId(){
+		return this.courseId;
+	}
 	
-	//constructor - load name and answers	
+	//constructor - load fileName and answers	
 	public Geography(Path entry)
 	{
 		//extract filename
-		Path fileName = entry.getFileName();
-        this.name = fileName.toString();
+		this.fileName = entry.getFileName().toString();
+        this.fullFile = this.fileToString(entry); 
+        this.answers = this.mapJson(fullFile);
         
-        System.out.println(name);
-        
-		String fullFile = null;
-		try {
-			fullFile = new String(Files.readAllBytes(entry));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		
-		//map JSON within string
-		
-		try{
-	    	Map<String, Object> stuff = (new Gson()).fromJson(fullFile, Map.class);
-		    Map<String, Object> groups = (Map<String,Object>) stuff.get("groups");
-		    Collection<Object> colors = groups.values();
-		    
-		    //colors is a collection that may contain more than one object
-		    
-		    //accounting for students who use more than one color
-		    ArrayList<String> allAnswers = new ArrayList<String>();
-		    Iterator<Object> itr = colors.iterator();
-		    
-	    	while(itr.hasNext()){
-		    	Map<String, Object> oneColor = (Map<String, Object>) itr.next();
-		    	ArrayList tempAnswers =(ArrayList<String>) oneColor.get("paths");
-		    	allAnswers.addAll(tempAnswers);
-	    	}
-	    	this.answers = allAnswers;
-	    		    
-		} catch (NoSuchElementException e){
-			e.printStackTrace();
-		}
-        
-        //String joined = String.join(", ", answers);
-        //System.out.println(joined);     
-      
+	}
+	public Geography(String fileContent, String filename, int userId, int assignmentId, int courseId){
+		this.fullFile = fileContent; 
+		this.fileName = filename;
+        this.answers = this.mapJson(fullFile);
+        this.userId = userId;
+        this.assignmentId = assignmentId;
+        this.courseId = courseId;
 	}
 	
+	private String fileToString(Path entry){
+	//this should be a method fileToString - setter?
+		String file = null;
+			try {
+				file = new String(Files.readAllBytes(entry));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return file;
+	}
+	
+	//map JSON within string
+	@SuppressWarnings("unchecked")
+	private ArrayList<String> mapJson(String fullFile){	
+		ArrayList<String>allAnswers = new ArrayList<String>();
+			try{
+		    	Map<String, Object> stuff = (new Gson()).fromJson(fullFile, Map.class);
+			    Map<String, Object> groups = (Map<String,Object>) stuff.get("groups");
+			    Collection<Object> colors = groups.values();
+			    //colors is a collection that may contain more than one object
+			    //accounting for students who use more than one color
+			    ArrayList<String> tempAnswers = new ArrayList<String>();
+			    Iterator<Object> itr = colors.iterator();
+			    
+		    	while(itr.hasNext()){
+			    	Map<String, Object> oneColor = (Map<String, Object>) itr.next();
+			    	tempAnswers =(ArrayList<String>) oneColor.get("paths");
+			    	allAnswers.addAll(tempAnswers);
+		    	}
+		    			    		    
+			} catch (NoSuchElementException e){
+				e.printStackTrace();
+			}
+			return allAnswers;
+	}
 }
 

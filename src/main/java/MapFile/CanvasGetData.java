@@ -3,6 +3,7 @@ package main.java.MapFile;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,59 +31,60 @@ public class CanvasGetData implements GetData {
 	static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 	/** Global instance of the JSON factory. */
 	static final JsonFactory JSON_FACTORY = new GsonFactory();
+	//Canvas course Id for testing
+	private int courseId = 21517;
 	
 //methods
 	public void getData(Assignment assign){
 		String token = this.getTestToken();
 		//url is for testing. Will need to enter at least part of this as an arg from console eventually
-		GenericUrl url = new GenericUrl("https://lindenwood.instructure.com/api/v1/courses/21517/assignments/234979/submissions?per_page=50");
+		//get list of submissions for an assignment from Canvas
+		GenericUrl url = new GenericUrl("https://lindenwood.instructure.com/api/v1/courses/"+ courseId +"/assignments/234979/submissions?per_page=50");
 		HttpResponse response;
 		String body = "";
 		try{
 			response = this.executeGet(HTTP_TRANSPORT, JSON_FACTORY, token, url);
-			
-			//response toString
-			Scanner s = new Scanner(response.getContent());
-			s.useDelimiter("\\A");
-			body = s.hasNext() ? s.next() : "";
-			s.close();
-			//check content of response
-		    System.out.println(body);   
-			
+			body = this.InputStreamToString(response.getContent());			
 		}catch(IOException e){
-			System.out.println(e + ": invalid HTTP response");
+			System.out.println(e + ": invalid HTTP response for list of submissions");
 			}
-		
+		//use gson to create an array of student objects
 		ArrayList<Students> students = this.createStudentList(body);
+		//iterate over student objects
 		Iterator<Students> studentsItr = students.iterator();
 		while(studentsItr.hasNext()){
 			Students student = studentsItr.next();
-			Iterator<Document> docsItr = student.attachments.iterator();
-			GenericUrl docUrl = null;
-			while(docsItr.hasNext()){
-				Document document = docsItr.next();
-				if (document.mime_class == "text"){
-					docUrl = new GenericUrl(document.mime_class);
+			
+			//iterate over attachments and file text file
+			if(student.attachments != null){
+				Iterator<Document> docsItr = student.attachments.iterator();
+				GenericUrl docUrl = null;
+				
+				while(docsItr.hasNext()){
+					Document document = docsItr.next();
+					
+					if (document.mime_class.equals("text")){
+						docUrl = new GenericUrl(document.url);
+						HttpResponse docResponse;
+						String docContent = null;
+						try {
+								HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
+							    docResponse = requestFactory.buildGetRequest(docUrl).execute();
+							    docContent = this.InputStreamToString(docResponse.getContent());
+							} catch (IOException e) {
+								System.out.println(e + ": invalid HTTP response to request for student file at" + student.user_id);
+							}
+							Geography curr = new Geography(docContent, document.filename, student.user_id, student.assignment_id, courseId);
+							assign.addToAssignment(curr);
+						}
+					}
 				}
 			}
 		}
-		
-	  }
-	
-				
-		//request assignments from the Canvas API ,<lindenwood.instructure.com> - this will return a JSON object
-		
-		//get user_id - this is not in Geography class currently
-		//get filename - this is Geography.name
-		//get late status (boolean)
-		//get URL for text file	
-		//download text file - pass Path to Geography constructor
-		//add Geography to assignmentArr
-		//assign.addToAssignment(/*Geography*/);
-		
+
+	//OAuth2 - get Canvas test token for my account	
 	private String getTestToken(){
-	//OAuth2 - get Canvas test token for my account
-			String token = "";
+		String token = "";
 			try{
 				String tmp;
 				BufferedReader buf = Files.newBufferedReader(DATA_STORE_DIR);
@@ -104,6 +106,15 @@ public class CanvasGetData implements GetData {
 		    return requestFactory.buildGetRequest(url).execute();
 		  }
 	
+	private String InputStreamToString(InputStream stream){
+		Scanner s = new Scanner(stream);
+		s.useDelimiter("\\A");
+		String string = s.hasNext() ? s.next() : "";
+		s.close();
+		//check content of response
+	    System.out.println(string); 
+	    return string;
+	}	
 			//parse JSON - modified from https://github.com/google/gson/blob/master/extras/src/main/java/com/google/gson/extras/examples/rawcollections/RawCollectionsExample.java
 			//also used: https://futurestud.io/tutorials/gson-mapping-of-arrays-and-lists-of-objects
 	private ArrayList<Students> createStudentList(String body){

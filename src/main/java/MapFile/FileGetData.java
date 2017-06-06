@@ -9,7 +9,6 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.zip.*;
 
 public class FileGetData implements GetData {
 
@@ -43,7 +42,7 @@ public class FileGetData implements GetData {
 		String tmp=null;
 		long time=0;
 		File tempDir, tempFile;
-		ArrayList fileQ=new ArrayList();
+		ArrayList<String> fileQ=new ArrayList<String>();
 		fileQ.add(dir);
 		
 		while(!fileQ.isEmpty()) {
@@ -52,7 +51,7 @@ public class FileGetData implements GetData {
 		  for(i=0; i<tempDir.list().length; i++) {
 		    tempFile=new File(tempDir.getPath()+File.separatorChar+tempDir.list()[i]);
 		    if(tempFile.isDirectory()) {
-		    	System.out.println(tempFile.getPath()+" "+fileQ.size());
+		    	//System.out.println(tempFile.getPath()+" "+fileQ.size());
 		    	if(tempFile.lastModified()>time) { 
 		    		time=tempFile.lastModified();     
 		    		tmp=tempFile.getPath(); 

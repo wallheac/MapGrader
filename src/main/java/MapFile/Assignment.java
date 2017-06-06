@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 
 public class Assignment {
@@ -28,7 +27,7 @@ public class Assignment {
 	public void addToAssignment(Geography student){
 		this.assignArr.add(student);
 	}
-	public void setAssignmentArr(ArrayList assignArr){
+	public void setAssignmentArr(ArrayList<Geography> assignArr){
 		this.assignArr = assignArr;
 	}
 	
@@ -83,7 +82,7 @@ public class Assignment {
 			temp.setGrade((pointsPossible - (int)((key.getAnswers().size() - count)/factor)));
 					
 			//this is console output. Eventually should be on other side of output interface
-			System.out.println(temp.getName() + " - " + "count: " + count + "... grade: " + temp.getGrade());
+			System.out.println(temp.getFileName() + " - " + "count: " + count + "... grade: " + temp.getGrade());
 		}
 }
 /*Thinking I should have users choosing Canvas or file input via CLI

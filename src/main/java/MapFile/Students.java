@@ -4,7 +4,7 @@ package main.java.MapFile;
 import java.util.Date;
 import java.util.List;
 
-import com.google.api.client.http.GenericUrl;
+
 
 public class Students {
 	int id;
@@ -13,8 +13,8 @@ public class Students {
     float grade;
     float score;
     Date submittedAt;
-    int assignmentId;
-    int userId;
+    int assignment_id;
+    int user_id;
     String submissionType;
     String workflowState;
     boolean grade_matches_current_submission;
