@@ -49,11 +49,11 @@ public class CanvasGetData implements GetData {
 			System.out.println(e + ": invalid HTTP response for list of submissions");
 			}
 		//use gson to create an array of student objects
-		ArrayList<Students> students = this.createStudentList(body);
+		ArrayList<Student> students = this.createStudentList(body);
 		//iterate over student objects
-		Iterator<Students> studentsItr = students.iterator();
+		Iterator<Student> studentsItr = students.iterator();
 		while(studentsItr.hasNext()){
-			Students student = studentsItr.next();
+			Student student = studentsItr.next();
 			
 			//iterate over attachments and file text file
 			if(student.attachments != null){
@@ -117,10 +117,10 @@ public class CanvasGetData implements GetData {
 	}	
 			//parse JSON - modified from https://github.com/google/gson/blob/master/extras/src/main/java/com/google/gson/extras/examples/rawcollections/RawCollectionsExample.java
 			//also used: https://futurestud.io/tutorials/gson-mapping-of-arrays-and-lists-of-objects
-	private ArrayList<Students> createStudentList(String body){
+	private ArrayList<Student> createStudentList(String body){
 		Gson gson = new Gson();
-		Type studentListType = new TypeToken<ArrayList<Students>>(){}.getType();
-		ArrayList<Students> students = gson.fromJson(body, studentListType);
+		Type studentListType = new TypeToken<ArrayList<Student>>(){}.getType();
+		ArrayList<Student> students = gson.fromJson(body, studentListType);
 		return students;
 	}
 	

@@ -6,7 +6,7 @@ import java.util.List;
 
 
 
-public class Students {
+public class Student {
 	int id;
     String body;
     String url;

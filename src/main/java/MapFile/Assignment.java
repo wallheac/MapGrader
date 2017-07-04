@@ -97,5 +97,7 @@ public static void main (String[] args){
 	data.getData(assignArr);//pass in an assignment
 	//grade it
 	assignArr.grade();
+	FileOutputData output = new FileOutputData();
+	output.OutputData(assignArr);
 }
 }
