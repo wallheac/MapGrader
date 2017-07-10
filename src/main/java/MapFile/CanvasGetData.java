@@ -33,13 +33,20 @@ public class CanvasGetData implements GetData {
 	static final JsonFactory JSON_FACTORY = new GsonFactory();
 	//Canvas course Id for testing
 	private int courseId = 21517;
+	//Canvas assignment Id for testing
+	private int assignmentId = 234979;
 	
-//methods
+	public void setCourseId(int courseId){
+		this.courseId = courseId;
+	}
+	public void setAssignmentId(int assignmentId){
+		this.assignmentId = assignmentId;
+	}
 	public void getData(Assignment assign){
 		String token = this.getTestToken();
 		//url is for testing. Will need to enter at least part of this as an arg from console eventually
 		//get list of submissions for an assignment from Canvas
-		GenericUrl url = new GenericUrl("https://lindenwood.instructure.com/api/v1/courses/"+ courseId +"/assignments/234979/submissions?per_page=50");
+		GenericUrl url = new GenericUrl("https://lindenwood.instructure.com/api/v1/courses/"+ courseId +"/assignments/"+ assignmentId +"/submissions?per_page=50");
 		HttpResponse response;
 		String body = "";
 		try{

@@ -5,12 +5,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import com.google.api.client.auth.oauth2.BearerToken;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpMediaType;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
@@ -79,5 +77,9 @@ public class CanvasOutputData implements OutputData{
 		    
 		    return requestFactory.buildPostRequest(url, content).execute();
 		  }
+
+	public void setCourseId(int courseId) {
+		this.courseId = courseId;		
+	}
 
 }

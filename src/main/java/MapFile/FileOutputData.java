@@ -7,12 +7,20 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class FileOutputData implements OutputData{
+	String filepath = "";
+	
+	public FileOutputData(){
+		this.filepath = "C:\\Users\\amy\\Documents\\W CIV\\Lindenwood\\Sp 17";
+	}
+	public FileOutputData(String filepathOut){
+		this.filepath = filepathOut;
+	}
 
 	public void OutputData(Assignment assignment) {
 		ArrayList<Geography> arr = assignment.getAssignment();
 		GregorianCalendar calendar = new GregorianCalendar();
 		String date = String.valueOf(calendar.get(Calendar.MONTH)) + "-" + String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
-		String filename = "C:\\Users\\amy\\Documents\\W CIV\\Lindenwood\\Sp 17\\" + date + ".txt";
+		String filename = this.filepath + "\\MapGrader" + date + ".txt";
 		String joinBy = ",";
 		String[]headers = {"student", "grade"};
 		

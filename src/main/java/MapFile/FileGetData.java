@@ -12,15 +12,24 @@ import java.util.Date;
 
 public class FileGetData implements GetData {
 
+	public Path dir;
+	
+	public FileGetData (){
+		this.dir = findMostRecentDir();
+	}
+	public FileGetData(String userPath){
+		this.dir = Paths.get(userPath);
+	}
+	
 	public Path getDir(){
-		return findMostRecentDir();
+		return this.dir;
 	}
 	
 //methods
 	public void getData(Assignment assign){
 		
-		//find the most recently modified dir and unzip most recent zip file
-		Path assignDir = this.zipHandler(this.findMostRecentDir());
+		//find the most recently modified dir and unzip most recent zip file if it exists. Returns dir if not
+		Path assignDir = this.zipHandler(this.dir);
 		
 		try {
 			DirectoryStream<Path> stream = Files.newDirectoryStream(assignDir, "*.{txt,json}"); 
